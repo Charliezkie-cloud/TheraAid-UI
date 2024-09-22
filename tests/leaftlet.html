@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Leaflet Map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../node_modules/leaflet/dist/leaflet.css'>
+</head>
+<body>
+    <main>
+        <div id="map" style="height: 500px; width: 750px;"></div>
+    </main>
+    
+    <script src='../node_modules/leaflet/dist/leaflet.js'></script>
+    <script>
+        (() => {
+            if (!navigator.geolocation) {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                const map = L.map('map').setView([latitude, longitude], 17);
+
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                L.marker([latitude, longitude]).addTo(map);
+                
+                L.marker([10.324756, 123.898314]).addTo(map)
+                    .bindPopup("Charles Henry M. Tinoy Jr. - Therapist")
+                    .openPopup();
+            }, showError);
+        })();
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
